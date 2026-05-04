@@ -47,6 +47,23 @@ For each FSM you find, record:
 - Which files and code sections it spans
 - Its states and transitions
 - How it is independent from or interacts with other FSMs in the codebase
+- **Its transition model** (see below)
+
+#### Classify the transition model
+
+For each FSM, determine whether it is **event-driven** or **wanted-state-driven**:
+
+- **Event-driven FSM**: The current state determines which transitions are possible. Transitions depend on the current state (e.g., you can only go from SPINNING_UP to AT_SETPOINT, not directly from OFF to AT_SETPOINT). These are true graph-structured state machines.
+
+- **Wanted-state-driven FSM** (also called "input-mapped" or "selector" FSMs): The internal state is re-computed every cycle as a pure function of an external "wanted state" input variable, with little or no dependence on the previous internal state. Any internal state can transition to any other internal state on the next cycle simply by changing the wanted input. These are common in robotics superstructure/orchestrator patterns where a switch statement maps a `wantedState` enum directly to a `currentState` enum.
+
+  Signs of a wanted-state-driven FSM:
+  - A `wantedState` / `desiredState` variable separate from `currentState`
+  - An `updateState()` method that switches on `wantedState` and assigns `currentState` with no conditional logic based on `previousState` or `currentState`
+  - Every branch of the switch unconditionally sets `currentState` regardless of what it was before
+  - The state machine has no "memory" — it doesn't matter what state you were in before, only what the wanted input is now
+
+  **Important**: A wanted-state-driven FSM may still have *one or two* branches that use conditional logic (e.g., an AUTO mode that checks robot position to decide between two states). These are still fundamentally wanted-state-driven — the conditional is on external data, not on the FSM's own history.
 
 Two state machines are **separate** if they:
 - Use different state variables or enums
@@ -67,6 +84,45 @@ For **each** identified FSM, produce a `stateDiagram-v2` Mermaid diagram that ca
 - Use clear, descriptive PascalCase state names
 - Add notes for complex states if needed
 - If two FSMs interact (one triggers transitions in another), add a note on the relevant transition indicating the cross-FSM dependency
+
+#### Mermaid syntax rules
+- **Never use parentheses** `()` in transition labels — they can break Mermaid parsing. Use square brackets `[condition]` or rephrase without special characters.
+- Keep transition labels concise — use short trigger names, not full sentences.
+
+#### Diagramming wanted-state-driven FSMs
+
+For **wanted-state-driven FSMs**, do NOT draw N² transitions between every pair of internal states. Since any state can transition to any other state by changing the wanted input, showing all possible edges creates a cluttered, uninformative diagram that implies false constraints.
+
+Instead, use this pattern:
+1. Show a central **choice node** or **start hub** representing the wanted-state input
+2. Draw transitions from `[*]` to each internal state, labeled with the wanted-state value that produces it
+3. For branches with conditional logic (e.g., AUTO mode that resolves to different states based on external data), show those as branching transitions with the condition
+4. Use notes on states to describe what actions/outputs each internal state triggers (e.g., which subsystem states it sets)
+5. If there are any history-dependent transitions within specific branches (e.g., AUTO_CYCLE switches between HUB and OUTPOST based on a sub-FSM), show only those specific transitions between the affected states
+
+Example structure for a wanted-state-driven FSM:
+```mermaid
+stateDiagram-v2
+    [*] --> IDLE : wanted = IDLE
+    [*] --> SHOOTING : wanted = SHOOT
+    [*] --> PREPARING : wanted = DEFAULT
+    [*] --> STATE_A : wanted = AUTO [condition X]
+    [*] --> STATE_B : wanted = AUTO [condition Y]
+
+    STATE_A --> STATE_B : sub-FSM switches target
+    STATE_B --> STATE_A : sub-FSM switches target
+
+    note right of SHOOTING
+        Sets flywheel to SPINNING_UP.
+        Sets hood to AIMING.
+    end note
+```
+
+This approach clearly communicates that the FSM is a **selector** — the wanted input chooses the state — rather than implying sequential state-to-state transitions that don't actually exist in the code.
+
+#### Diagramming event-driven FSMs
+
+For **event-driven FSMs**, draw the actual state graph showing only the transitions that are possible from each state. These diagrams should show the true topology — which states can reach which other states and under what conditions.
 
 ### 5. Write output files
 
