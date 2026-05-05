@@ -230,6 +230,7 @@ Also write **c) `fsm-output/index.html`** — a landing page that links to all t
         Made by <a href="https://github.com/JRTaylord">JRTaylord</a>
         &middot; <a href="https://www.frc360.com/">Team 360 Website</a>
         &middot; <a href="https://github.com/FRCTeam360">Team 360 GitHub</a>
+        &middot; <a href="https://github.com/JRTaylord/robot-fsm-skill">FSM Extractor</a>
       </footer>
     </div>
   </body>
@@ -349,6 +350,7 @@ For each individual FSM viewer HTML, use this template, replacing `%%MERMAID_DIA
         Made by <a href="https://github.com/JRTaylord">JRTaylord</a>
         &middot; <a href="https://www.frc360.com/">Team 360 Website</a>
         &middot; <a href="https://github.com/FRCTeam360">Team 360 GitHub</a>
+        &middot; <a href="https://github.com/JRTaylord/robot-fsm-skill">FSM Extractor</a>
       </div>
     </header>
 
