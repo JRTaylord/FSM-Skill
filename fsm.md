@@ -146,70 +146,65 @@ Also write **c) `fsm-output/index.html`** — a landing page that links to all t
     <title>State Machines</title>
     <style>
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         margin: 0;
-        padding: 40px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
+        padding: 48px 24px;
+        background: #fff;
+        color: #1a1a1a;
       }
       .container {
-        max-width: 800px;
+        max-width: 720px;
         margin: 0 auto;
       }
       h1 {
-        color: white;
-        text-align: center;
-        margin-bottom: 10px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0 0 4px;
       }
       .subtitle {
-        color: rgba(255, 255, 255, 0.9);
-        text-align: center;
-        margin-bottom: 40px;
-        font-size: 14px;
+        color: #666;
+        font-size: 13px;
+        margin: 0 0 32px;
       }
       .fsm-list {
         list-style: none;
         padding: 0;
+        margin: 0;
       }
       .fsm-list li {
-        background: white;
-        border-radius: 12px;
-        padding: 24px 30px;
-        margin-bottom: 16px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        padding: 16px 0;
+        border-bottom: 1px solid #e5e5e5;
       }
-      .fsm-list li:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      .fsm-list li:first-child {
+        border-top: 1px solid #e5e5e5;
       }
       .fsm-list a {
         text-decoration: none;
-        color: #667eea;
-        font-size: 20px;
-        font-weight: 600;
+        color: #0969da;
+        font-size: 16px;
+        font-weight: 500;
       }
       .fsm-list a:hover {
-        color: #5568d3;
+        text-decoration: underline;
       }
       .fsm-desc {
-        color: #666;
+        color: #555;
         font-size: 14px;
-        margin-top: 6px;
+        margin-top: 4px;
+        line-height: 1.4;
       }
       .fsm-files {
-        color: #999;
+        color: #888;
         font-size: 12px;
         margin-top: 4px;
-        font-family: monospace;
+        font-family: ui-monospace, "SF Mono", Menlo, monospace;
       }
     </style>
   </head>
   <body>
     <div class="container">
       <h1>State Machines</h1>
-      <p class="subtitle">Extracted from source code by FSM Extractor</p>
+      <p class="subtitle">Extracted from source code</p>
       <ul class="fsm-list">
         %%FSM_LIST%%
       </ul>
@@ -235,82 +230,65 @@ For each individual FSM viewer HTML, use this template, replacing `%%MERMAID_DIA
   <head>
     <meta charset="UTF-8" />
     <title>%%FSM_TITLE%% - State Machine Diagram</title>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
     <style>
+      * { box-sizing: border-box; }
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         margin: 0;
-        padding: 20px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
+        padding: 0;
+        background: #f8f8f8;
+        color: #1a1a1a;
       }
-      .container {
-        max-width: 100%;
-        margin: 0 auto;
-      }
-      h1 {
-        color: white;
-        text-align: center;
-        margin-bottom: 10px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-      }
-      .subtitle {
-        color: rgba(255, 255, 255, 0.9);
-        text-align: center;
-        margin-bottom: 30px;
-        font-size: 14px;
-      }
-      .controls {
-        background: white;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
+      header {
+        background: #fff;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 12px 24px;
         display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 10px;
+        align-items: center;
+        gap: 16px;
       }
-      button {
-        padding: 10px 20px;
-        background: #667eea;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: 500;
-        transition: all 0.3s ease;
-      }
-      button:hover {
-        background: #5568d3;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      }
-      button:active {
-        transform: translateY(0);
-      }
-      .back-link {
-        display: inline-block;
-        color: rgba(255, 255, 255, 0.9);
+      header a {
+        color: #555;
         text-decoration: none;
-        margin-bottom: 20px;
-        font-size: 14px;
+        font-size: 13px;
       }
-      .back-link:hover {
-        color: white;
+      header a:hover {
+        color: #0969da;
+      }
+      header h1 {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0;
+      }
+      .toolbar {
+        margin-left: auto;
+        display: flex;
+        gap: 8px;
+      }
+      .toolbar button {
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 500;
+        background: #fff;
+        border: 1px solid #d0d0d0;
+        border-radius: 4px;
+        cursor: pointer;
+        color: #333;
+      }
+      .toolbar button:hover {
+        background: #f0f0f0;
+        border-color: #bbb;
       }
       #diagram-container {
-        background: white;
+        background: #fff;
         padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         overflow: visible;
         width: 90%;
         max-width: 1400px;
         height: 700px;
-        margin: 0 auto;
+        margin: 20px auto;
         position: relative;
       }
       #diagram-container svg {
@@ -324,19 +302,17 @@ For each individual FSM viewer HTML, use this template, replacing `%%MERMAID_DIA
     </style>
   </head>
   <body>
-    <div class="container">
-      <a class="back-link" href="index.html">&larr; All State Machines</a>
+    <header>
+      <a href="index.html">&larr; Back</a>
       <h1>%%FSM_TITLE%%</h1>
-      <p class="subtitle">Generated by FSM Extractor</p>
-
-      <div class="controls">
-        <button onclick="downloadSVG()">Download SVG</button>
-        <button onclick="downloadPNG()">Download PNG</button>
+      <div class="toolbar">
+        <button onclick="downloadSVG()">Export SVG</button>
+        <button onclick="downloadPNG()">Export PNG</button>
       </div>
+    </header>
 
-      <div id="diagram-container">
-        <div class="mermaid">%%MERMAID_DIAGRAM%%</div>
-      </div>
+    <div id="diagram-container">
+      <div class="mermaid">%%MERMAID_DIAGRAM%%</div>
     </div>
 
     <script>
@@ -372,40 +348,42 @@ For each individual FSM viewer HTML, use this template, replacing `%%MERMAID_DIA
 
       function downloadSVG() {
         const svg = document.querySelector("#diagram-container svg");
-        if (svg) {
-          const svgString = new XMLSerializer().serializeToString(svg);
-          const blob = new Blob([svgString], { type: "image/svg+xml" });
-          const a = document.createElement("a");
-          a.href = URL.createObjectURL(blob);
-          a.download = "%%FSM_TITLE%%.svg";
-          a.click();
-          URL.revokeObjectURL(a.href);
-        }
+        if (!svg) return;
+        const blob = new Blob(
+          [new XMLSerializer().serializeToString(svg)],
+          { type: "image/svg+xml" }
+        );
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "%%FSM_TITLE%%.svg";
+        a.click();
+        URL.revokeObjectURL(a.href);
       }
 
       function downloadPNG() {
         const svg = document.querySelector("#diagram-container svg");
-        if (svg) {
+        if (!svg) return;
+        const svgData = new XMLSerializer().serializeToString(svg);
+        const img = new Image();
+        img.onload = function () {
           const canvas = document.createElement("canvas");
+          canvas.width = img.width * 2;
+          canvas.height = img.height * 2;
           const ctx = canvas.getContext("2d");
-          const svgData = new XMLSerializer().serializeToString(svg);
-          const img = new Image();
-          img.onload = function () {
-            canvas.width = img.width * 2;
-            canvas.height = img.height * 2;
-            ctx.fillStyle = "white";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            canvas.toBlob(function (blob) {
-              const a = document.createElement("a");
-              a.href = URL.createObjectURL(blob);
-              a.download = "%%FSM_TITLE%%.png";
-              a.click();
-              URL.revokeObjectURL(a.href);
-            });
-          };
-          img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
-        }
+          ctx.fillStyle = "#fff";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob(function (blob) {
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "%%FSM_TITLE%%.png";
+            a.click();
+            URL.revokeObjectURL(a.href);
+          });
+        };
+        img.src =
+          "data:image/svg+xml;base64," +
+          btoa(unescape(encodeURIComponent(svgData)));
       }
     </script>
   </body>
