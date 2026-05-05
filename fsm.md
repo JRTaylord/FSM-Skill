@@ -199,6 +199,22 @@ Also write **c) `fsm-output/index.html`** — a landing page that links to all t
         margin-top: 4px;
         font-family: ui-monospace, "SF Mono", Menlo, monospace;
       }
+      footer {
+        margin-top: 48px;
+        padding-top: 16px;
+        border-top: 1px solid #e5e5e5;
+        font-size: 12px;
+        color: #888;
+        display: flex;
+        gap: 16px;
+      }
+      footer a {
+        color: #0969da;
+        text-decoration: none;
+      }
+      footer a:hover {
+        text-decoration: underline;
+      }
     </style>
   </head>
   <body>
@@ -208,6 +224,11 @@ Also write **c) `fsm-output/index.html`** — a landing page that links to all t
       <ul class="fsm-list">
         %%FSM_LIST%%
       </ul>
+      <footer>
+        Made by <a href="https://github.com/JRTaylord">JRTaylord</a>
+        &middot; <a href="https://www.frc360.com/">Team 360 Website</a>
+        &middot; <a href="https://github.com/FRCTeam360">Team 360 GitHub</a>
+      </footer>
     </div>
   </body>
 </html>
@@ -281,6 +302,19 @@ For each individual FSM viewer HTML, use this template, replacing `%%MERMAID_DIA
         background: #f0f0f0;
         border-color: #bbb;
       }
+      .links {
+        display: flex;
+        gap: 12px;
+        margin-left: 16px;
+        font-size: 12px;
+      }
+      .links a {
+        color: #888;
+        text-decoration: none;
+      }
+      .links a:hover {
+        color: #0969da;
+      }
       #diagram-container {
         background: #fff;
         padding: 30px;
@@ -308,6 +342,11 @@ For each individual FSM viewer HTML, use this template, replacing `%%MERMAID_DIA
       <div class="toolbar">
         <button onclick="downloadSVG()">Export SVG</button>
         <button onclick="downloadPNG()">Export PNG</button>
+      </div>
+      <div class="links">
+        Made by <a href="https://github.com/JRTaylord">JRTaylord</a>
+        &middot; <a href="https://www.frc360.com/">Team 360 Website</a>
+        &middot; <a href="https://github.com/FRCTeam360">Team 360 GitHub</a>
       </div>
     </header>
 
