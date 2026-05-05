@@ -126,19 +126,40 @@ This approach clearly communicates that the FSM is a **selector** — the wanted
 
 For **event-driven FSMs**, draw the actual state graph showing only the transitions that are possible from each state. These diagrams should show the true topology — which states can reach which other states and under what conditions.
 
-### 5. Write output files
+### 5. Write `.mmd` files
 
 Create an output directory called `fsm-output` inside the target path (or current working directory if none was given).
 
-For **each** FSM identified, write two files using a kebab-case version of the FSM name:
+For **each** FSM identified, write a file using a kebab-case version of the FSM name:
 
-**a) `fsm-output/<fsm-name>.mmd`** — the raw Mermaid diagram code for that FSM.
+**`fsm-output/<fsm-name>.mmd`** — the raw Mermaid diagram code for that FSM.
 
-**b) `fsm-output/<fsm-name>.html`** — a self-contained interactive HTML viewer for that FSM.
+If only one FSM is found, name the file `state-machine.mmd`.
 
-If only one FSM is found, name the files `state-machine.mmd` and `view-diagram.html`.
+### 6. Validate Mermaid diagrams
 
-Also write **c) `fsm-output/index.html`** — a landing page that links to all the individual viewers, showing each FSM's name and a brief description. Use this template, replacing `%%FSM_LIST%%` with an `<li>` for each FSM:
+Before generating HTML viewers, verify that each `.mmd` file compiles without errors using the Mermaid CLI. Run:
+
+```bash
+npx -y @mermaid-js/mermaid-cli mmdc -i fsm-output/<fsm-name>.mmd -o /dev/null
+```
+
+Do this for **every** `.mmd` file produced in the previous step. If any file fails validation:
+1. Read the error output to identify the syntax issue
+2. Fix the `.mmd` file (common issues: unescaped parentheses in labels, missing state names, invalid characters)
+3. Re-run the validation until it passes
+
+Do **not** proceed to generating HTML files until all `.mmd` files compile successfully.
+
+### 7. Write HTML output files
+
+For **each** validated FSM, write an HTML viewer:
+
+**`fsm-output/<fsm-name>.html`** — a self-contained interactive HTML viewer for that FSM.
+
+If only one FSM is found, name the file `view-diagram.html`.
+
+Also write **`fsm-output/index.html`** — a landing page that links to all the individual viewers, showing each FSM's name and a brief description. Use this template, replacing `%%FSM_LIST%%` with an `<li>` for each FSM:
 
 ```html
 <!doctype html>
@@ -433,7 +454,7 @@ For each individual FSM viewer HTML, use this template, replacing `%%MERMAID_DIA
 </html>
 ```
 
-### 6. Report to the user
+### 8. Report to the user
 
 Tell the user:
 - How many FSMs were found and a brief summary of each (name, states, key transitions)
