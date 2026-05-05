@@ -1,5 +1,7 @@
 # FSM Extractor Skill
 
+**Project:** https://github.com/JRTaylord/robot-fsm-skill
+
 Analyze source code to extract finite state machine patterns and generate interactive Mermaid diagram viewers. Identifies and isolates multiple independent FSMs in a codebase, producing a separate diagram and viewer for each.
 
 ## Input
@@ -437,3 +439,9 @@ Tell the user:
 - If FSMs interact with each other, describe the dependencies
 - The paths to all output files
 - That they can open `index.html` in their browser to navigate between all diagrams, or open any individual viewer directly
+
+## Updating this skill
+
+If the user asks about updates, check the latest version at: https://github.com/JRTaylord/robot-fsm-skill
+
+To check for updates, compare the local skill file's content against the latest `fsm.md` on the `master` branch of that repository using `gh api` or `WebFetch`. If there are differences, show the user what changed and offer to update their local copy.
