@@ -89,6 +89,7 @@ For **each** identified FSM, produce a `stateDiagram-v2` Mermaid diagram that ca
 
 #### Mermaid syntax rules
 - **Never use parentheses** `()` in transition labels — they can break Mermaid parsing. Use square brackets `[condition]` or rephrase without special characters.
+- **Never use Mermaid reserved words as state names** in `stateDiagram-v2`. The following are reserved and will cause parse errors: `default`, `DEFAULT`, `note`, `end`, `as`, `direction`, `state`, `hide`, `empty`. Use PascalCase alternatives instead (e.g., `DefaultPrep` instead of `DEFAULT`, `NoteState` instead of `Note`).
 - Keep transition labels concise — use short trigger names, not full sentences.
 
 #### Diagramming wanted-state-driven FSMs
@@ -107,7 +108,7 @@ Example structure for a wanted-state-driven FSM:
 stateDiagram-v2
     [*] --> IDLE : wanted = IDLE
     [*] --> SHOOTING : wanted = SHOOT
-    [*] --> PREPARING : wanted = DEFAULT
+    [*] --> Preparing : wanted = DEFAULT
     [*] --> STATE_A : wanted = AUTO [condition X]
     [*] --> STATE_B : wanted = AUTO [condition Y]
 
@@ -138,15 +139,27 @@ If only one FSM is found, name the file `state-machine.mmd`.
 
 ### 6. Validate Mermaid diagrams
 
-Before generating HTML viewers, verify that each `.mmd` file compiles without errors using the Mermaid CLI. Run:
+Before generating HTML viewers, verify that each `.mmd` file compiles without errors using the Mermaid CLI.
+
+**Important:** The `@mermaid-js/mermaid-cli` package does **not** use a `mmdc` subcommand — invoke it directly via `npx`. The output flag requires a real file path with a `.svg` extension (not `/dev/null`). Use a temporary file and delete it after validation.
+
+Validate all `.mmd` files in a single loop:
 
 ```bash
-npx -y @mermaid-js/mermaid-cli mmdc -i fsm-output/<fsm-name>.mmd -o /dev/null
+for f in fsm-output/*.mmd; do
+  echo "=== Validating $f ==="
+  npx -y @mermaid-js/mermaid-cli -i "$f" -o fsm-output/_validate.svg
+  echo "Exit: $?"
+done
+rm -f fsm-output/_validate.svg
 ```
 
-Do this for **every** `.mmd` file produced in the previous step. If any file fails validation:
+If any file fails validation:
 1. Read the error output to identify the syntax issue
-2. Fix the `.mmd` file (common issues: unescaped parentheses in labels, missing state names, invalid characters)
+2. Fix the `.mmd` file — common issues:
+   - **Reserved words as state names**: `default`, `note`, `end`, `state`, `as`, etc. cause `Expecting 'ID'` errors. Rename to PascalCase (e.g., `DefaultPrep`).
+   - **Unescaped parentheses** in transition labels — use square brackets or rephrase.
+   - **Missing or invalid state names** — every transition endpoint must be a valid identifier.
 3. Re-run the validation until it passes
 
 Do **not** proceed to generating HTML files until all `.mmd` files compile successfully.
