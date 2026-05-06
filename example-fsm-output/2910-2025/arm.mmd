@@ -1,0 +1,25 @@
+stateDiagram-v2
+    [*] --> Idling : wanted = IDLE
+    [*] --> HomingShoulderAndExtension : wanted = HOME
+    [*] --> MovingToPosition : wanted = MOVE_TO_POSITION
+
+    HomingShoulderAndExtension --> HomingShoulderAndExtension : velocity above threshold
+    HomingShoulderAndExtension --> HomingWrist : velocity below threshold for time period
+    HomingWrist --> HomingWrist : wrist velocity above threshold
+    HomingWrist --> Idling : wrist velocity below threshold for time period
+
+    note right of HomingShoulderAndExtension
+        Drives extension and shoulder
+        into hard stop at duty cycle
+    end note
+
+    note right of HomingWrist
+        Drives wrist into hard stop
+        after shoulder/extension tared
+    end note
+
+    note right of MovingToPosition
+        Sequences shoulder before extension
+        when retracting from L4.
+        Limits wrist angle based on extension.
+    end note

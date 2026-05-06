@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>State Machines</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        margin: 0;
+        padding: 48px 24px;
+        background: #fff;
+        color: #1a1a1a;
+      }
+      .container {
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0 0 4px;
+      }
+      .subtitle {
+        color: #666;
+        font-size: 13px;
+        margin: 0 0 32px;
+      }
+      .fsm-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .fsm-list li {
+        padding: 16px 0;
+        border-bottom: 1px solid #e5e5e5;
+      }
+      .fsm-list li:first-child {
+        border-top: 1px solid #e5e5e5;
+      }
+      .fsm-list a {
+        text-decoration: none;
+        color: #0969da;
+        font-size: 16px;
+        font-weight: 500;
+      }
+      .fsm-list a:hover {
+        text-decoration: underline;
+      }
+      .fsm-desc {
+        color: #555;
+        font-size: 14px;
+        margin-top: 4px;
+        line-height: 1.4;
+      }
+      .fsm-files {
+        color: #888;
+        font-size: 12px;
+        margin-top: 4px;
+        font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      }
+      footer {
+        margin-top: 48px;
+        padding-top: 16px;
+        border-top: 1px solid #e5e5e5;
+        font-size: 12px;
+        color: #888;
+        display: flex;
+        gap: 16px;
+      }
+      footer a {
+        color: #0969da;
+        text-decoration: none;
+      }
+      footer a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>State Machines</h1>
+      <p class="subtitle">Extracted from source code</p>
+      <ul class="fsm-list">
+        <li>
+          <a href="superstructure.html">Superstructure</a>
+          <div class="fsm-desc">Top-level robot orchestrator that coordinates arm, intake, drive, climber, and LEDs based on operator commands and game state</div>
+          <div class="fsm-files">Files: Superstructure.java</div>
+        </li>
+        <li>
+          <a href="intake.html">Intake</a>
+          <div class="fsm-desc">Controls coral and algae manipulation with sensor-based indexing and detection logic</div>
+          <div class="fsm-files">Files: IntakeSubsystem.java</div>
+        </li>
+        <li>
+          <a href="arm.html">Arm</a>
+          <div class="fsm-desc">Three-axis arm control with sequential homing procedure and motion sequencing</div>
+          <div class="fsm-files">Files: ArmSubsystem.java</div>
+        </li>
+        <li>
+          <a href="climber.html">Climber</a>
+          <div class="fsm-desc">Cage intake and carriage positioning with homing and cage detection</div>
+          <div class="fsm-files">Files: ClimberSubsystem.java</div>
+        </li>
+        <li>
+          <a href="led.html">LED</a>
+          <div class="fsm-desc">LED animation controller displaying robot status through color patterns</div>
+          <div class="fsm-files">Files: LEDSubsystem.java</div>
+        </li>
+      </ul>
+      <footer>
+        Made by <a href="https://github.com/JRTaylord">JRTaylord</a>
+        &middot; <a href="https://www.frc360.com/">Team 360 Website</a>
+        &middot; <a href="https://github.com/FRCTeam360">Team 360 GitHub</a>
+        &middot; <a href="https://github.com/JRTaylord/robot-fsm-skill">FSM Extractor</a>
+      </footer>
+    </div>
+  </body>
+</html>

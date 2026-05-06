@@ -1,0 +1,37 @@
+stateDiagram-v2
+    [*] --> CollectingAlgae : wanted = COLLECT_ALGAE [no algae detected]
+    [*] --> HoldingAlgae : wanted = COLLECT_ALGAE [algae entered]
+    [*] --> HoldingAlgaeHarder : wanted = COLLECT_ALGAE [algae just detected]
+    [*] --> HoldingAlgae : wanted = HOLD_ALGAE
+    [*] --> HoldingAlgaeHarder : wanted = HOLD_ALGAE_HARDER
+    [*] --> EjectingAlgae : wanted = EJECT_ALGAE
+    [*] --> EjectingAlgaeProcessor : wanted = EJECT_ALGAE_PROCESSOR
+    [*] --> CollectingCoralStraight : wanted = COLLECT_CORAL_STRAIGHT [no sensors tripped]
+    [*] --> HoldingCoralStraight : wanted = COLLECT_CORAL_STRAIGHT [back sensor tripped]
+    [*] --> IndexCoralRightFaster : wanted = COLLECT_CORAL_STRAIGHT [front sensors tripped]
+    [*] --> CollectingCoralFromStation : wanted = COLLECT_CORAL_FROM_STATION [no sensors]
+    [*] --> HoldingCoralStraight : wanted = COLLECT_CORAL_FROM_STATION [back sensor]
+    [*] --> IndexCoralRightFaster : wanted = COLLECT_CORAL_FROM_STATION [front sensors]
+    [*] --> CollectingCoralHorizontal : wanted = COLLECT_CORAL_HORIZONTAL [no sensors]
+    [*] --> HoldingCoralHorizontal : wanted = COLLECT_CORAL_HORIZONTAL [horizontal coral]
+    [*] --> IndexingFromStraightToHorizontal : wanted = COLLECT_CORAL_HORIZONTAL [back sensor]
+    [*] --> IndexCoralRight : wanted = COLLECT_CORAL_HORIZONTAL [front left sensor]
+    [*] --> IndexCoralLeft : wanted = COLLECT_CORAL_HORIZONTAL [front right sensor]
+    [*] --> HoldingCoralStraight : wanted = HOLD_CORAL_STRAIGHT [centered]
+    [*] --> IndexingCoralForward : wanted = HOLD_CORAL_STRAIGHT [back only]
+    [*] --> IndexingCoralBackward : wanted = HOLD_CORAL_STRAIGHT [front only]
+    [*] --> HoldingCoralHorizontal : wanted = HOLD_CORAL_HORIZONTAL
+    [*] --> EjectingCoralL1Straight : wanted = EJECT_CORAL_L1 [has straight coral]
+    [*] --> EjectingCoralL1Horizontal : wanted = EJECT_CORAL_L1 [no straight coral]
+    [*] --> EjectingCoralForwards : wanted = EJECT_CORAL_FORWARDS
+    [*] --> EjectingCoralBackwards : wanted = EJECT_CORAL_BACKWARDS
+    [*] --> IndexingCoralForward : wanted = INDEX_CORAL_FORWARD [back sensor]
+    [*] --> HoldingCoralStraight : wanted = INDEX_CORAL_FORWARD [no back sensor]
+    [*] --> IndexingCoralBackward : wanted = INDEX_CORAL_BACKWARD [front sensor]
+    [*] --> HoldingCoralStraight : wanted = INDEX_CORAL_BACKWARD [no front sensor]
+    [*] --> Off : wanted = OFF
+
+    note right of CollectingAlgae
+        Algae detection uses current
+        and velocity thresholds
+    end note

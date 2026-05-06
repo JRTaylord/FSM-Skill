@@ -1,0 +1,28 @@
+stateDiagram-v2
+    [*] --> Idled : wanted = IDLE
+    [*] --> Stowed : wanted = STOWED
+    [*] --> Intaking : wanted = INTAKE [no cage]
+    [*] --> Holding : wanted = INTAKE [cage detected]
+    [*] --> Rejecting : wanted = REJECT
+    [*] --> MovingToPosition : wanted = MOVE_TO_POSITION
+    [*] --> IntakeAndMove : wanted = INTAKE_AND_MOVE
+    [*] --> Homing : wanted = HOME
+    [*] --> Holding : wanted = HOLD
+
+    Intaking --> Holding : cage velocity drop detected
+    Homing --> Idled : velocity below threshold for time period
+
+    note right of Homing
+        Drives carriage into hard stop.
+        Resets position on completion.
+    end note
+
+    note right of Intaking
+        Cage detection uses supply current
+        and velocity thresholds
+    end note
+
+    note left of Idled
+        Required before any other state
+        unless homed via button tare
+    end note
