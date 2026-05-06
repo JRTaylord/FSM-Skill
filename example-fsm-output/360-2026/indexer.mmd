@@ -1,0 +1,21 @@
+stateDiagram-v2
+    [*] --> IndexerOff : wanted = OFF
+    [*] --> AssistIntaking : wanted = ASSIST_INTAKING
+    [*] --> Indexing : wanted = INDEXING
+    [*] --> IndexerReversing : wanted = REVERSING
+
+    note right of IndexerOff
+        Motor stopped.
+    end note
+
+    note right of AssistIntaking
+        Duty cycle: -0.15
+    end note
+
+    note right of Indexing
+        Velocity: 3000 RPM
+    end note
+
+    note right of IndexerReversing
+        Duty cycle: -0.35
+    end note

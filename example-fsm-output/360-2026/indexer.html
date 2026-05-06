@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Indexer - State Machine Diagram</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f8f8f8;
+        color: #1a1a1a;
+      }
+      header {
+        background: #fff;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 12px 24px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      header a {
+        color: #555;
+        text-decoration: none;
+        font-size: 13px;
+      }
+      header a:hover {
+        color: #0969da;
+      }
+      header h1 {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0;
+      }
+      .toolbar {
+        margin-left: auto;
+        display: flex;
+        gap: 8px;
+      }
+      .toolbar button {
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 500;
+        background: #fff;
+        border: 1px solid #d0d0d0;
+        border-radius: 4px;
+        cursor: pointer;
+        color: #333;
+      }
+      .toolbar button:hover {
+        background: #f0f0f0;
+        border-color: #bbb;
+      }
+      .links {
+        display: flex;
+        gap: 12px;
+        margin-left: 16px;
+        font-size: 12px;
+      }
+      .links a {
+        color: #888;
+        text-decoration: none;
+      }
+      .links a:hover {
+        color: #0969da;
+      }
+      #diagram-container {
+        background: #fff;
+        padding: 30px;
+        overflow: visible;
+        width: 90%;
+        max-width: 1400px;
+        height: 700px;
+        margin: 20px auto;
+        position: relative;
+      }
+      #diagram-container svg {
+        width: 100%;
+        height: 100%;
+      }
+      .mermaid {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="index.html">&larr; Back</a>
+      <h1>Indexer</h1>
+      <div class="toolbar">
+        <button onclick="downloadSVG()">Export SVG</button>
+        <button onclick="downloadPNG()">Export PNG</button>
+      </div>
+      <div class="links">
+        Made by <a href="https://github.com/JRTaylord">JRTaylord</a>
+        &middot; <a href="https://www.frc360.com/">Team 360 Website</a>
+        &middot; <a href="https://github.com/FRCTeam360">Team 360 GitHub</a>
+        &middot; <a href="https://github.com/JRTaylord/robot-fsm-skill">FSM Extractor</a>
+      </div>
+    </header>
+
+    <div id="diagram-container">
+      <div class="mermaid">stateDiagram-v2
+    [*] --> IndexerOff : wanted = OFF
+    [*] --> AssistIntaking : wanted = ASSIST_INTAKING
+    [*] --> Indexing : wanted = INDEXING
+    [*] --> IndexerReversing : wanted = REVERSING
+
+    note right of IndexerOff
+        Motor stopped.
+    end note
+
+    note right of AssistIntaking
+        Duty cycle: -0.15
+    end note
+
+    note right of Indexing
+        Velocity: 3000 RPM
+    end note
+
+    note right of IndexerReversing
+        Duty cycle: -0.35
+    end note
+</div>
+    </div>
+
+    <script>
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: "default",
+        securityLevel: "loose",
+        flowchart: { useMaxWidth: false },
+      });
+
+      let panZoomInstance = null;
+
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          const svg = document.querySelector("#diagram-container svg");
+          if (svg && typeof svgPanZoom !== "undefined") {
+            panZoomInstance = svgPanZoom(svg, {
+              zoomEnabled: true,
+              controlIconsEnabled: true,
+              fit: true,
+              center: true,
+              minZoom: 0.3,
+              maxZoom: 10,
+              zoomScaleSensitivity: 0.3,
+              dblClickZoomEnabled: true,
+              mouseWheelZoomEnabled: true,
+              preventMouseEventsDefault: true,
+              contain: false,
+            });
+          }
+        }, 500);
+      });
+
+      function downloadSVG() {
+        const svg = document.querySelector("#diagram-container svg");
+        if (!svg) return;
+        const blob = new Blob(
+          [new XMLSerializer().serializeToString(svg)],
+          { type: "image/svg+xml" }
+        );
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "Indexer.svg";
+        a.click();
+        URL.revokeObjectURL(a.href);
+      }
+
+      function downloadPNG() {
+        const svg = document.querySelector("#diagram-container svg");
+        if (!svg) return;
+        const svgData = new XMLSerializer().serializeToString(svg);
+        const img = new Image();
+        img.onload = function () {
+          const canvas = document.createElement("canvas");
+          canvas.width = img.width * 2;
+          canvas.height = img.height * 2;
+          const ctx = canvas.getContext("2d");
+          ctx.fillStyle = "#fff";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob(function (blob) {
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "Indexer.png";
+            a.click();
+            URL.revokeObjectURL(a.href);
+          });
+        };
+        img.src =
+          "data:image/svg+xml;base64," +
+          btoa(unescape(encodeURIComponent(svgData)));
+      }
+    </script>
+  </body>
+</html>

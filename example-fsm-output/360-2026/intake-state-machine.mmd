@@ -1,0 +1,43 @@
+stateDiagram-v2
+    [*] --> IntakeIdle : wanted = IDLE
+    [*] --> Intaking : wanted = INTAKING
+    [*] --> Stowed : wanted = STOWED
+    [*] --> AgitatingLow : wanted = AGITATING [sensor FULL]
+    [*] --> AgitatingHigh : wanted = AGITATING [sensor HALF_EMPTY]
+    [*] --> AgitatingProgressive : wanted = AGITATING_PROGRESSIVE
+    [*] --> Deployed : wanted = DEPLOYED
+    [*] --> IntakeReversing : wanted = REVERSING
+
+    AgitatingProgressive --> Deployed : pivot progressive complete
+
+    note right of IntakeIdle
+        Roller: IDLE
+        Pivot: IDLE
+    end note
+
+    note right of Intaking
+        Roller: INTAKING
+        Pivot: DEPLOYED
+    end note
+
+    note right of Stowed
+        Roller: IDLE
+        Pivot: STOWED
+    end note
+
+    note right of AgitatingLow
+        Roller: ASSIST_SHOOTING
+        Pivot: AGITATE_HOPPER_LOW
+        Balls detected over spindexer.
+    end note
+
+    note right of AgitatingHigh
+        Roller: ASSIST_SHOOTING
+        Pivot: AGITATE_HOPPER_HIGH
+        No balls over spindexer.
+    end note
+
+    note right of AgitatingProgressive
+        Pivot: AGITATE_PROGRESSIVE
+        Steps toward stowed.
+    end note

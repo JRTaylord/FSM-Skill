@@ -1,0 +1,28 @@
+stateDiagram-v2
+    [*] --> RollerIdle : wanted = IDLE
+    [*] --> AssistShooting : wanted = ASSIST_SHOOTING
+    [*] --> RollerReversing : wanted = REVERSING
+
+    [*] --> RollerIntaking : wanted = INTAKING
+
+    RollerIntaking --> JamDetected : stall detected [high current + low velocity for 0.25s]
+    JamDetected --> RollerUnjamming : unjam attempts < 3
+    JamDetected --> RollerIntaking : unjam attempts >= 3 [give up]
+    RollerUnjamming --> RollerIntaking : unjam timer expired or jam cleared
+
+    note right of RollerIntaking
+        Velocity control at 4250 RPM.
+        WoodBot: duty cycle 0.7.
+    end note
+
+    note right of JamDetected
+        Stall: stator current > 50A
+        and velocity < 50 RPM
+        for 0.25 seconds.
+    end note
+
+    note right of RollerUnjamming
+        Reverse at -0.5 duty cycle.
+        Clears after 0.15s or
+        velocity exceeds threshold.
+    end note

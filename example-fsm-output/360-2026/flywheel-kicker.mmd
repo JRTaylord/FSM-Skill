@@ -1,0 +1,31 @@
+stateDiagram-v2
+    [*] --> KickerOff : wanted = IDLE
+    [*] --> KickerReversing : wanted = REVERSING
+
+    [*] --> KickerSpinningUp : wanted = KICKING
+
+    KickerSpinningUp --> KickerAtSetpoint : velocity within tolerance [debounced]
+    KickerAtSetpoint --> KickerRecovering : ball fired [velocity dip past debounce]
+    KickerRecovering --> KickerAtSetpoint : velocity recovered to tolerance
+    KickerRecovering --> UnderKicking : sustained RPM drop [0.2s debounce]
+    UnderKicking --> KickerSpinningUp : wanted state re-entered
+
+    note right of KickerSpinningUp
+        Aggressive spinup control.
+        Max acceleration.
+    end note
+
+    note right of KickerAtSetpoint
+        Hold velocity control.
+        Target: 3500 RPM.
+    end note
+
+    note right of KickerRecovering
+        Re-spinning after note pass.
+        Kick count incremented.
+    end note
+
+    note right of UnderKicking
+        Too many rapid notes.
+        Kicker cannot recover.
+    end note

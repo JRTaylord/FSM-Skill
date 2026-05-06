@@ -1,0 +1,51 @@
+stateDiagram-v2
+    [*] --> Idle : wanted = IDLE
+    [*] --> Standby : wanted = PASSIVE [in alliance zone]
+    [*] --> Waiting : wanted = PASSIVE [not in alliance zone]
+    [*] --> ShooterUnjamming : wanted = REVERSING
+
+    [*] --> PreparingToFire : wanted = SHOOTING or FORCED_SHOT
+
+    PreparingToFire --> Aimed : flywheel + hood + drive ready
+    Aimed --> Firing : target ready
+    Firing --> Disturbed : hood or drive misaligned
+    Disturbed --> Firing : re-aligned within timeout
+    Disturbed --> PreparingToFire : disturbance timed out
+    Firing --> PreparingToFire : flywheel UNDER_SHOOTING
+
+    note right of Idle
+        Flywheel: IDLE
+        Hood: IDLE
+        Kicker: IDLE
+    end note
+
+    note right of Standby
+        Flywheel: COASTING
+        Hood: DUCKED
+        Kicker: IDLE
+    end note
+
+    note right of Waiting
+        Flywheel: IDLE
+        Hood: DUCKED
+        Kicker: IDLE
+    end note
+
+    note right of PreparingToFire
+        Flywheel: SHOOTING
+        Hood: AIMING
+        Kicker: KICKING [non-WoodBot]
+    end note
+
+    note right of Firing
+        Flywheel: SHOOTING
+        Hood: AIMING
+        Kicker: KICKING
+        Indexer + Hopper activated
+    end note
+
+    note right of Disturbed
+        Stays in FIRING mode.
+        Tolerates brief misalignment.
+        Times out after 0.5s.
+    end note

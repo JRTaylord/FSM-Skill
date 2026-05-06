@@ -1,0 +1,33 @@
+stateDiagram-v2
+    [*] --> Off : wanted = IDLE
+    [*] --> Coast : wanted = COASTING
+
+    [*] --> SpinningUp : wanted = SHOOTING
+
+    SpinningUp --> AtSetpoint : velocity within tolerance [debounced]
+    AtSetpoint --> Recovering : ball fired [velocity dip past debounce]
+    Recovering --> AtSetpoint : velocity recovered to tolerance
+    Recovering --> UnderShooting : sustained RPM drop [0.4s debounce]
+    UnderShooting --> SpinningUp : wanted state re-entered
+
+    note right of SpinningUp
+        Duty-cycle bang-bang.
+        Max acceleration.
+    end note
+
+    note right of AtSetpoint
+        Torque-current bang-bang.
+        Consistent hold.
+    end note
+
+    note right of Recovering
+        Duty-cycle bang-bang.
+        Re-spinning after ball pass.
+        Launch count incremented.
+    end note
+
+    note right of UnderShooting
+        Too many rapid shots.
+        Flywheel cannot recover.
+        Signals shooter to revert.
+    end note

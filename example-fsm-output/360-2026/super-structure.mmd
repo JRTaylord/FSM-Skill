@@ -1,0 +1,49 @@
+stateDiagram-v2
+    [*] --> Idle : wanted = IDLE
+    [*] --> ShootingAtHub : wanted = SHOOT_AT_HUB
+    [*] --> Passing : wanted = SHOOT_AT_OUTPOST
+    [*] --> ShootingAtHub : wanted = AUTO_CYCLE [in alliance zone]
+    [*] --> Passing : wanted = AUTO_CYCLE [not in alliance zone]
+    [*] --> Unjamming : wanted = UNJAMMING
+    [*] --> ForcedShot : wanted = FORCED_SHOT
+    [*] --> ForcedShootTrench : wanted = FORCED_SHOOT_TRENCH
+    [*] --> ForcedPass : wanted = FORCED_PASS
+    [*] --> DefaultPrep : wanted = DEFAULT
+
+    note right of Idle
+        All subsystems stopped.
+        Shooter: IDLE
+        Intake: IDLE
+    end note
+
+    note right of DefaultPrep
+        Flywheel coasting, hood ducking.
+        Shooter: PASSIVE_SHOOTER
+        Target: AUTO select
+    end note
+
+    note right of ShootingAtHub
+        Shooter: SHOOTING
+        Target: Hub calculator
+    end note
+
+    note right of Passing
+        Shooter: SHOOTING
+        Target: Pass calculator
+    end note
+
+    note right of ForcedShot
+        Shooter: FORCED_SHOT
+        Fixed RPM and hood angle
+    end note
+
+    note right of ForcedShootTrench
+        Shooter: FORCED_SHOT
+        Trench RPM and hood angle
+    end note
+
+    note right of ForcedPass
+        Shooter: FORCED_SHOT
+        Pass RPM and hood angle
+        Target: Outpost calculator
+    end note

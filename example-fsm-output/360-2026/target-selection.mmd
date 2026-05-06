@@ -1,0 +1,15 @@
+stateDiagram-v2
+    [*] --> AtHub : wanted = HUB
+    [*] --> AtOutpost : wanted = OUTPOST
+    [*] --> AtHub : wanted = AUTO [in alliance zone]
+    [*] --> AtOutpost : wanted = AUTO [not in alliance zone]
+
+    note right of AtHub
+        Active calculator: Hub
+        Shot aimed at hub target.
+    end note
+
+    note right of AtOutpost
+        Active calculator: Pass
+        Shot aimed at outpost target.
+    end note

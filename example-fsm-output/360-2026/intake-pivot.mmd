@@ -1,0 +1,46 @@
+stateDiagram-v2
+    [*] --> PivotIdle : wanted = IDLE
+
+    [*] --> PivotMoving : wanted = STOWED or DEPLOYED [not at target]
+    [*] --> PivotAtSetpoint : wanted = STOWED or DEPLOYED [at target]
+
+    PivotMoving --> PivotAtSetpoint : reached target position
+    PivotAtSetpoint --> PivotMoving : target changed
+
+    state AgitationCycle {
+        [*] --> AgMovingToTarget
+        AgMovingToTarget --> SwitchingLow : at high target
+        AgMovingToTarget --> SwitchingHigh : at low target
+        SwitchingLow --> AgAtSetpoint : toggle to low
+        SwitchingHigh --> AgAtSetpoint : toggle to high
+        AgAtSetpoint --> AgMovingToTarget : new agitate cycle
+    }
+
+    [*] --> AgitationCycle : wanted = AGITATE_HOPPER_LOW or HIGH
+
+    state ProgressiveCycle {
+        [*] --> ProgMoving
+        ProgMoving --> ProgSwitchLow : at dip target
+        ProgMoving --> ProgSwitchHigh : at step target
+        ProgSwitchLow --> ProgAtSetpoint : toggle down
+        ProgSwitchHigh --> ProgAtSetpoint : toggle up, increment cycle
+        ProgAtSetpoint --> ProgMoving : next step
+        ProgMoving --> ProgressiveComplete : step target below 0 deg
+    }
+
+    [*] --> ProgressiveCycle : wanted = AGITATE_PROGRESSIVE
+
+    note right of PivotIdle
+        Motor stopped.
+    end note
+
+    note right of AgitationCycle
+        Oscillates between upper
+        and lower agitate positions.
+    end note
+
+    note right of ProgressiveCycle
+        Steps toward stowed in
+        15 deg increments with
+        10 deg dip-backs.
+    end note

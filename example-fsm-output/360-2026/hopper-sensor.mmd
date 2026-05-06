@@ -1,0 +1,27 @@
+stateDiagram-v2
+    state NotAgitatingMode {
+        [*] --> SensorFull : sensor activated [debounced]
+        [*] --> HalfEmpty : sensor not activated [debounced]
+        SensorFull --> HalfEmpty : sensor deactivated
+        HalfEmpty --> SensorFull : sensor activated
+    }
+
+    state AgitatingMode {
+        [*] --> AgHalfEmpty : entered while not activated
+        [*] --> AgFull : entered while activated
+        AgFull --> AgHalfEmpty : falling edge [sensor clears]
+    }
+
+    [*] --> NotAgitatingMode : wanted = NOT_AGITATING
+    [*] --> AgitatingMode : wanted = AGITATING
+
+    note right of NotAgitatingMode
+        Mirrors sensor directly.
+        Updates every cycle.
+    end note
+
+    note right of AgitatingMode
+        One-way latch.
+        FULL only resets on
+        falling edge.
+    end note

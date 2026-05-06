@@ -1,0 +1,27 @@
+stateDiagram-v2
+    [*] --> HopperOff : wanted = OFF
+    [*] --> Rolling : wanted = ROLLING
+    [*] --> HopperUnjamming : wanted = UNJAMMING
+    [*] --> PreventJam : wanted = PREVENT_JAM
+    [*] --> HopperReversing : wanted = REVERSING
+
+    note right of HopperOff
+        Motor stopped.
+    end note
+
+    note right of Rolling
+        Velocity: 2000 RPM
+    end note
+
+    note right of HopperUnjamming
+        Duty cycle: -0.95
+    end note
+
+    note right of PreventJam
+        Duty cycle: -0.04
+        Slow reverse to prevent jams.
+    end note
+
+    note right of HopperReversing
+        Duty cycle: -0.5
+    end note

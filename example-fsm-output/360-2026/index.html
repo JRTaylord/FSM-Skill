@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>State Machines</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        margin: 0;
+        padding: 48px 24px;
+        background: #fff;
+        color: #1a1a1a;
+      }
+      .container {
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0 0 4px;
+      }
+      .subtitle {
+        color: #666;
+        font-size: 13px;
+        margin: 0 0 32px;
+      }
+      .fsm-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .fsm-list li {
+        padding: 16px 0;
+        border-bottom: 1px solid #e5e5e5;
+      }
+      .fsm-list li:first-child {
+        border-top: 1px solid #e5e5e5;
+      }
+      .fsm-list a {
+        text-decoration: none;
+        color: #0969da;
+        font-size: 16px;
+        font-weight: 500;
+      }
+      .fsm-list a:hover {
+        text-decoration: underline;
+      }
+      .fsm-desc {
+        color: #555;
+        font-size: 14px;
+        margin-top: 4px;
+        line-height: 1.4;
+      }
+      .fsm-files {
+        color: #888;
+        font-size: 12px;
+        margin-top: 4px;
+        font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      }
+      footer {
+        margin-top: 48px;
+        padding-top: 16px;
+        border-top: 1px solid #e5e5e5;
+        font-size: 12px;
+        color: #888;
+        display: flex;
+        gap: 16px;
+      }
+      footer a {
+        color: #0969da;
+        text-decoration: none;
+      }
+      footer a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>State Machines</h1>
+      <p class="subtitle">Extracted from RainMaker26 robot code</p>
+      <ul class="fsm-list">
+        <li>
+          <a href="super-structure.html">SuperStructure</a>
+          <div class="fsm-desc">Top-level orchestrator FSM that coordinates all subsystems. Maps driver-requested modes to internal states controlling shooter, intake, indexer, and hopper.</div>
+          <div class="fsm-files">Files: SuperStructure.java</div>
+        </li>
+        <li>
+          <a href="shooter-state-machine.html">Shooter State Machine</a>
+          <div class="fsm-desc">Coordinates flywheel, hood, and kicker to determine shooter readiness. Event-driven firing cycle with disturbance tolerance.</div>
+          <div class="fsm-files">Files: ShooterStateMachine.java</div>
+        </li>
+        <li>
+          <a href="intake-state-machine.html">Intake State Machine</a>
+          <div class="fsm-desc">Coordinates intake rollers and pivot for intaking, stowing, agitating, and reversing. Driven by driver inputs through SuperStructure.</div>
+          <div class="fsm-files">Files: IntakeStateMachine.java</div>
+        </li>
+        <li>
+          <a href="target-selection.html">Target Selection</a>
+          <div class="fsm-desc">Decides whether to shoot at the hub or outpost based on manual overrides or automatic alliance zone detection.</div>
+          <div class="fsm-files">Files: TargetSelectionStateMachine.java</div>
+        </li>
+        <li>
+          <a href="flywheel.html">Flywheel</a>
+          <div class="fsm-desc">Bang-bang velocity controller with shot detection, recovery tracking, and underspeed detection for rapid-fire scenarios.</div>
+          <div class="fsm-files">Files: Flywheel.java</div>
+        </li>
+        <li>
+          <a href="flywheel-kicker.html">Flywheel Kicker</a>
+          <div class="fsm-desc">Bang-bang velocity controller for the kicker wheel, mirroring the flywheel's shot detection and recovery lifecycle.</div>
+          <div class="fsm-files">Files: FlywheelKicker.java</div>
+        </li>
+        <li>
+          <a href="hood.html">Hood</a>
+          <div class="fsm-desc">Position controller for the hood angle, with aiming, ducking, and soft-limit-aware PID switching.</div>
+          <div class="fsm-files">Files: Hood.java</div>
+        </li>
+        <li>
+          <a href="intake-pivot.html">Intake Pivot</a>
+          <div class="fsm-desc">Position controller with stow/deploy, oscillating agitation cycles, and progressive step-down agitation.</div>
+          <div class="fsm-files">Files: IntakePivot.java</div>
+        </li>
+        <li>
+          <a href="intake-roller.html">Intake Roller</a>
+          <div class="fsm-desc">Roller motor controller with automatic jam detection and multi-attempt unjamming recovery.</div>
+          <div class="fsm-files">Files: IntakeRoller.java</div>
+        </li>
+        <li>
+          <a href="hopper-sensor.html">Hopper Sensor</a>
+          <div class="fsm-desc">Sensor state with hysteresis latch for agitation mode. Detects ball presence over the spindexer.</div>
+          <div class="fsm-files">Files: HopperSensor.java</div>
+        </li>
+        <li>
+          <a href="indexer.html">Indexer</a>
+          <div class="fsm-desc">Simple wanted-state-driven motor controller for indexing balls into the shooter.</div>
+          <div class="fsm-files">Files: Indexer.java</div>
+        </li>
+        <li>
+          <a href="hopper-roller.html">Hopper Roller</a>
+          <div class="fsm-desc">Simple wanted-state-driven motor controller for the hopper agitation roller.</div>
+          <div class="fsm-files">Files: HopperRoller.java</div>
+        </li>
+      </ul>
+      <footer>
+        Made by <a href="https://github.com/JRTaylord">JRTaylord</a>
+        &middot; <a href="https://www.frc360.com/">Team 360 Website</a>
+        &middot; <a href="https://github.com/FRCTeam360">Team 360 GitHub</a>
+        &middot; <a href="https://github.com/JRTaylord/robot-fsm-skill">FSM Extractor</a>
+      </footer>
+    </div>
+  </body>
+</html>

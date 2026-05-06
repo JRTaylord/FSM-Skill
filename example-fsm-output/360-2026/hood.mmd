@@ -1,0 +1,30 @@
+stateDiagram-v2
+    [*] --> HoodOff : wanted = IDLE
+
+    [*] --> Moving : wanted = AIMING [not at setpoint]
+    [*] --> HoodAtSetpoint : wanted = AIMING [at setpoint]
+
+    [*] --> Zeroing : wanted = DUCKED
+
+    Moving --> HoodAtSetpoint : position within 1 deg tolerance
+    HoodAtSetpoint --> Moving : position drifts outside tolerance
+
+    note right of HoodOff
+        Motor output: zero.
+    end note
+
+    note right of Moving
+        PID position control.
+        Aggressive near center,
+        smooth near soft limits.
+    end note
+
+    note right of HoodAtSetpoint
+        Holding target angle.
+        Signals shooter readiness.
+    end note
+
+    note right of Zeroing
+        Moving hood to 0 degrees.
+        Smooth position control.
+    end note
