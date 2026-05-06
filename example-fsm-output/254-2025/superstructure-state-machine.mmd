@@ -1,0 +1,87 @@
+stateDiagram-v2
+    [*] --> StowCoral
+
+    state "Stow / Transit" as stow_group {
+        StowCoral
+        StowAlgae
+        StowElevator
+        ClearElevatorCrossbeam
+        ClearWheels
+        ClearLimelight
+        ClearBumper
+    }
+
+    state "Coral Scoring" as coral_group {
+        StageCoralL1
+        StageCoralL2
+        NonDescoreCoralL2
+        StageCoralL3
+        NonDescoreCoralL3
+        IntermediateCoralL4
+        StageCoralL4
+        NonDescoreCoralL4
+    }
+
+    state "Algae Handling" as algae_group {
+        GroundAlgaeIntake
+        LollipopIntake
+        ReefAlgaeSlap
+        ReefAlgaeIntakeL2
+        ReefAlgaeIntakeL3
+        ReefAlgaeIntakeL3Manual
+        StageProcessor
+        IntermediateBarge
+        StageBarge
+    }
+
+    StowCoral --> ClearElevatorCrossbeam : via A* path
+    StowCoral --> ClearWheels : direct
+    StowCoral --> StageCoralL1 : direct
+    StowCoral --> StageCoralL2 : direct
+    StowCoral --> StageCoralL3 : direct
+    StowCoral --> StageCoralL4 : direct
+    StowCoral --> GroundAlgaeIntake : direct
+    StowCoral --> LollipopIntake : direct
+
+    ClearElevatorCrossbeam --> StageCoralL4 : via path
+    ClearElevatorCrossbeam --> StageBarge : via IntermediateBarge
+    ClearElevatorCrossbeam --> StowCoral : via ClearWheels
+
+    IntermediateBarge --> ClearElevatorCrossbeam : only allowed
+    IntermediateBarge --> StageBarge : only allowed
+
+    StageBarge --> ClearElevatorCrossbeam : only exit
+
+    IntermediateCoralL4 --> NonDescoreCoralL4 : only exit
+
+    ClearBumper --> StowAlgae : allowed
+    ClearBumper --> GroundAlgaeIntake : allowed
+
+    StowAlgae --> StageProcessor : direct
+    StowAlgae --> ClearElevatorCrossbeam : via path to barge
+    StowAlgae --> ReefAlgaeIntakeL2 : direct
+    StowAlgae --> ReefAlgaeIntakeL3 : direct
+
+    StageCoralL2 --> NonDescoreCoralL2 : avoid descore
+    StageCoralL3 --> NonDescoreCoralL3 : avoid descore
+    StageCoralL4 --> NonDescoreCoralL4 : avoid descore
+
+    GroundAlgaeIntake --> StowAlgae : direct
+    ReefAlgaeIntakeL2 --> StowAlgae : direct
+    ReefAlgaeIntakeL3 --> StowAlgae : direct
+
+    note right of StowCoral
+        Hub state for coral mode.
+        Blocked from STAGE_BARGE,
+        NON_DESCORE_L4, INTERMEDIATE_BARGE.
+    end note
+
+    note right of ClearElevatorCrossbeam
+        Transit node for tall positions.
+        Wrist angles adjusted dynamically.
+    end note
+
+    note right of StageBarge
+        Only reachable via IntermediateBarge.
+        Only exits to ClearElevatorCrossbeam.
+    end note

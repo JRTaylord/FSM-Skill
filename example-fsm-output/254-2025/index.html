@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>State Machines</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        margin: 0;
+        padding: 48px 24px;
+        background: #fff;
+        color: #1a1a1a;
+      }
+      .container {
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0 0 4px;
+      }
+      .subtitle {
+        color: #666;
+        font-size: 13px;
+        margin: 0 0 32px;
+      }
+      .fsm-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .fsm-list li {
+        padding: 16px 0;
+        border-bottom: 1px solid #e5e5e5;
+      }
+      .fsm-list li:first-child {
+        border-top: 1px solid #e5e5e5;
+      }
+      .fsm-list a {
+        text-decoration: none;
+        color: #0969da;
+        font-size: 16px;
+        font-weight: 500;
+      }
+      .fsm-list a:hover {
+        text-decoration: underline;
+      }
+      .fsm-desc {
+        color: #555;
+        font-size: 14px;
+        margin-top: 4px;
+        line-height: 1.4;
+      }
+      .fsm-files {
+        color: #888;
+        font-size: 12px;
+        margin-top: 4px;
+        font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      }
+      footer {
+        margin-top: 48px;
+        padding-top: 16px;
+        border-top: 1px solid #e5e5e5;
+        font-size: 12px;
+        color: #888;
+        display: flex;
+        gap: 16px;
+      }
+      footer a {
+        color: #0969da;
+        text-decoration: none;
+      }
+      footer a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>State Machines</h1>
+      <p class="subtitle">Extracted from Team 254 FRC 2025 source code</p>
+      <ul class="fsm-list">
+        <li>
+          <a href="superstructure-state-machine.html">Superstructure State Machine</a>
+          <div class="fsm-desc">Graph-based FSM controlling elevator height and wrist angle positions. Uses A* pathfinding to compute optimal transition paths between 24 states with collision avoidance.</div>
+          <div class="fsm-files">Files: SuperstructureStateMachine.java, SuperstructureState.java, StateTransition.java</div>
+        </li>
+        <li>
+          <a href="coral-state-tracker.html">Coral State Tracker</a>
+          <div class="fsm-desc">Event-driven FSM tracking coral game piece position through the intake pipeline: from indexer sensors through claw staging. Uses sensor triggers and timeouts for transitions.</div>
+          <div class="fsm-files">Files: CoralStateTracker.java</div>
+        </li>
+      </ul>
+      <footer>
+        Made by <a href="https://github.com/JRTaylord">JRTaylord</a>
+        &middot; <a href="https://www.frc360.com/">Team 360 Website</a>
+        &middot; <a href="https://github.com/FRCTeam360">Team 360 GitHub</a>
+        &middot; <a href="https://github.com/JRTaylord/robot-fsm-skill">FSM Extractor</a>
+      </footer>
+    </div>
+  </body>
+</html>

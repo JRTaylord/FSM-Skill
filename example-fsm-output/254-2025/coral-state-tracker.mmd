@@ -1,0 +1,21 @@
+stateDiagram-v2
+    [*] --> None
+
+    None --> AtFirstIndexer : firstIndexer triggered
+    None --> AtSecondIndexer : secondIndexer triggered
+
+    AtFirstIndexer --> GoingToSecondIndexer : firstIndexer released
+    AtFirstIndexer --> AtSecondIndexer : secondIndexer triggered
+
+    GoingToSecondIndexer --> AtSecondIndexer : secondIndexer triggered
+    GoingToSecondIndexer --> AtFirstIndexer : firstIndexer triggered
+    GoingToSecondIndexer --> ProcessingInClaw : stageBanner triggered
+    GoingToSecondIndexer --> None : timeout 0.5s
+
+    AtSecondIndexer --> ProcessingInClaw : stageBanner triggered
+    AtSecondIndexer --> None : timeout 0.5s
+
+    ProcessingInClaw --> StagedInClaw : stageBanner and not processing
+    ProcessingInClaw --> None : timeout 1.5s
+
+    StagedInClaw --> None : stageBanner released + timeout 0.5s
