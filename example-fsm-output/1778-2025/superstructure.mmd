@@ -1,0 +1,102 @@
+stateDiagram-v2
+    [*] --> StartPosition
+
+    %% Initial transitions
+    StartPosition --> Rest : wantGroundIntake or wantArmSourceIntake
+    StartPosition --> PreScore : isAutonomous
+
+    %% Arm source intake
+    Rest --> ArmSourceIntake : wantArmSourceIntake
+    ArmSourceIntake --> Rest : released or Arm.hasObject
+
+    %% Intake source intake
+    Rest --> SourceIntake : wantSourceIntake
+    SourceIntake --> Rest : released or Intake.hasCoral
+
+    %% Reverse handoff to trough
+    PreScore --> Rest : wantedLevel=TROUGH or no object
+    Rest --> ReverseHandoff : atSetpoints, level=TROUGH, hasObject, intake up
+    ReverseHandoff --> Rest : Intake.hasCoral or wantReset
+
+    %% Trough scoring
+    Rest --> PreTrough : wantExtend, level=TROUGH, atSetpoints
+    PreTrough --> Trough : Intake.atSetpoint and wantScore
+    PreTrough --> Rest : not wantExtend
+    Trough --> Rest : not wantScore
+
+    %% Handoff sequence
+    Rest --> PreHandoff : atSetpoints, level!=TROUGH, Intake.hasCoral
+    PreHandoff --> Handoff : all atSetpoint
+    Handoff --> Rest : Arm.hasObject or wantReset
+
+    %% Transition to scoring
+    Rest --> PreScore : Arm.hasObject, level!=TROUGH
+
+    %% L4 scoring sequence
+    PreScore --> PrepareL4 : wantExtend, level=L4
+    PrepareL4 --> PreScore : atSetpoint, no object or released
+    PrepareL4 --> StartL4 : Elevator near setpoint, hasObject
+    StartL4 --> PrepareL4 : released or level changed
+    StartL4 --> PlaceL4 : atSetpoints and wantScore
+    PlaceL4 --> AfterL4 : atSetpoints
+    AfterL4 --> Rest : Arm.insideFrame
+
+    %% L3 scoring sequence
+    PreScore --> PrepareL3 : wantExtend, level=L3
+    PrepareL3 --> PreScore : atSetpoint, no object or released
+    PrepareL3 --> StartL3 : Elevator near setpoint, hasObject
+    StartL3 --> PrepareL3 : released or level changed
+    StartL3 --> PlaceL3 : atSetpoints and wantScore
+    PlaceL3 --> AfterL3 : atSetpoints, safe distance
+    AfterL3 --> Rest : Arm.insideFrame
+
+    %% L2 scoring sequence
+    PreScore --> PrepareL2 : wantExtend, level=L2
+    PrepareL2 --> PreScore : atSetpoint, no object or released
+    PrepareL2 --> StartL2 : Elevator near setpoint, hasObject
+    StartL2 --> PrepareL2 : released or level changed
+    StartL2 --> PlaceL2 : atSetpoints and wantScore
+    PlaceL2 --> AfterL2 : atSetpoints, safe distance
+    AfterL2 --> Rest : Arm.insideFrame
+
+    %% Algae retrieval
+    Rest --> PreGetAlgae : wantGetAlgae, no object
+    AlgaeExit --> PreGetAlgae : wantGetAlgae, no object
+    PreGetAlgae --> Rest : not wantGetAlgae
+    PreGetAlgae --> GetAlgae : Elevator.atSetpoint
+    GetAlgae --> PreGetAlgae : not wantGetAlgae
+    GetAlgae --> PostGetAlgae : Arm.hasObject
+    PostGetAlgae --> AlgaeRest : atSetpoint, safe reef distance
+
+    %% Algae exit
+    AlgaeRest --> AlgaeExit : not Arm.hasObject
+    AlgaeExit --> Rest : atSetpoints
+
+    %% Barge scoring
+    AlgaeRest --> PreBarge : wantExtend
+    PreBarge --> AlgaeRest : not wantExtend
+    PreBarge --> ScoreBarge : wantScore, at scoring distance
+    ScoreBarge --> PreBarge : released or no object, safe barge distance
+
+    %% Algae descore
+    Rest --> AlgaeDescore : wantDescoreAlgae
+    AlgaeDescore --> Rest : not wantDescoreAlgae
+
+    %% Processor scoring
+    AlgaeRest --> PreProcessor : wantScoreProcessor
+    PreProcessor --> ScoreProcessor : wantScore
+    ScoreProcessor --> AlgaeRest : released, no object, safe distance
+    PreProcessor --> AlgaeRest : released, safe distance
+
+    %% Algae ground intake
+    Rest --> PreAlgaeGroundIntake : wantAlgaeGroundIntake, no object
+    PreAlgaeGroundIntake --> AlgaeGroundIntake : wantAlgaeGroundIntake, Intake.atSetpoint
+    AlgaeGroundIntake --> ExitAlgaeGroundIntake : released or Arm.hasObject
+    ExitAlgaeGroundIntake --> AlgaeRest : atSetpoints
+
+    %% Popsicle pickup
+    Rest --> PrePopsiclePickup : wantPopsiclePickup, no object
+    PrePopsiclePickup --> PopsiclePickup : wantPopsiclePickup, Intake.atSetpoint
+    PopsiclePickup --> PrePopsiclePickup : released or auto timeout
+    PrePopsiclePickup --> Rest : not wantPopsiclePickup
+    PopsiclePickup --> PreScore : timeout and Arm.hasObject

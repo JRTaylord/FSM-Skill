@@ -1,0 +1,283 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Superstructure FSM - State Machine Diagram</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f8f8f8;
+        color: #1a1a1a;
+      }
+      header {
+        background: #fff;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 12px 24px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      header a {
+        color: #555;
+        text-decoration: none;
+        font-size: 13px;
+      }
+      header a:hover {
+        color: #0969da;
+      }
+      header h1 {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0;
+      }
+      .toolbar {
+        margin-left: auto;
+        display: flex;
+        gap: 8px;
+      }
+      .toolbar button {
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 500;
+        background: #fff;
+        border: 1px solid #d0d0d0;
+        border-radius: 4px;
+        cursor: pointer;
+        color: #333;
+      }
+      .toolbar button:hover {
+        background: #f0f0f0;
+        border-color: #bbb;
+      }
+      .links {
+        display: flex;
+        gap: 12px;
+        margin-left: 16px;
+        font-size: 12px;
+      }
+      .links a {
+        color: #888;
+        text-decoration: none;
+      }
+      .links a:hover {
+        color: #0969da;
+      }
+      #diagram-container {
+        background: #fff;
+        padding: 30px;
+        overflow: visible;
+        width: 90%;
+        max-width: 1400px;
+        height: 700px;
+        margin: 20px auto;
+        position: relative;
+      }
+      #diagram-container svg {
+        width: 100%;
+        height: 100%;
+      }
+      .mermaid {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="index.html">&larr; Back</a>
+      <h1>Superstructure FSM</h1>
+      <div class="toolbar">
+        <button onclick="downloadSVG()">Export SVG</button>
+        <button onclick="downloadPNG()">Export PNG</button>
+      </div>
+      <div class="links">
+        Made by <a href="https://github.com/JRTaylord">JRTaylord</a>
+        &middot; <a href="https://www.frc360.com/">Team 360 Website</a>
+        &middot; <a href="https://github.com/FRCTeam360">Team 360 GitHub</a>
+        &middot; <a href="https://github.com/JRTaylord/robot-fsm-skill">FSM Extractor</a>
+      </div>
+    </header>
+
+    <div id="diagram-container">
+      <div class="mermaid">stateDiagram-v2
+    [*] --> StartPosition
+
+    %% Initial transitions
+    StartPosition --> Rest : wantGroundIntake or wantArmSourceIntake
+    StartPosition --> PreScore : isAutonomous
+
+    %% Arm source intake
+    Rest --> ArmSourceIntake : wantArmSourceIntake
+    ArmSourceIntake --> Rest : released or Arm.hasObject
+
+    %% Intake source intake
+    Rest --> SourceIntake : wantSourceIntake
+    SourceIntake --> Rest : released or Intake.hasCoral
+
+    %% Reverse handoff to trough
+    PreScore --> Rest : wantedLevel=TROUGH or no object
+    Rest --> ReverseHandoff : atSetpoints, level=TROUGH, hasObject, intake up
+    ReverseHandoff --> Rest : Intake.hasCoral or wantReset
+
+    %% Trough scoring
+    Rest --> PreTrough : wantExtend, level=TROUGH, atSetpoints
+    PreTrough --> Trough : Intake.atSetpoint and wantScore
+    PreTrough --> Rest : not wantExtend
+    Trough --> Rest : not wantScore
+
+    %% Handoff sequence
+    Rest --> PreHandoff : atSetpoints, level!=TROUGH, Intake.hasCoral
+    PreHandoff --> Handoff : all atSetpoint
+    Handoff --> Rest : Arm.hasObject or wantReset
+
+    %% Transition to scoring
+    Rest --> PreScore : Arm.hasObject, level!=TROUGH
+
+    %% L4 scoring sequence
+    PreScore --> PrepareL4 : wantExtend, level=L4
+    PrepareL4 --> PreScore : atSetpoint, no object or released
+    PrepareL4 --> StartL4 : Elevator near setpoint, hasObject
+    StartL4 --> PrepareL4 : released or level changed
+    StartL4 --> PlaceL4 : atSetpoints and wantScore
+    PlaceL4 --> AfterL4 : atSetpoints
+    AfterL4 --> Rest : Arm.insideFrame
+
+    %% L3 scoring sequence
+    PreScore --> PrepareL3 : wantExtend, level=L3
+    PrepareL3 --> PreScore : atSetpoint, no object or released
+    PrepareL3 --> StartL3 : Elevator near setpoint, hasObject
+    StartL3 --> PrepareL3 : released or level changed
+    StartL3 --> PlaceL3 : atSetpoints and wantScore
+    PlaceL3 --> AfterL3 : atSetpoints, safe distance
+    AfterL3 --> Rest : Arm.insideFrame
+
+    %% L2 scoring sequence
+    PreScore --> PrepareL2 : wantExtend, level=L2
+    PrepareL2 --> PreScore : atSetpoint, no object or released
+    PrepareL2 --> StartL2 : Elevator near setpoint, hasObject
+    StartL2 --> PrepareL2 : released or level changed
+    StartL2 --> PlaceL2 : atSetpoints and wantScore
+    PlaceL2 --> AfterL2 : atSetpoints, safe distance
+    AfterL2 --> Rest : Arm.insideFrame
+
+    %% Algae retrieval
+    Rest --> PreGetAlgae : wantGetAlgae, no object
+    AlgaeExit --> PreGetAlgae : wantGetAlgae, no object
+    PreGetAlgae --> Rest : not wantGetAlgae
+    PreGetAlgae --> GetAlgae : Elevator.atSetpoint
+    GetAlgae --> PreGetAlgae : not wantGetAlgae
+    GetAlgae --> PostGetAlgae : Arm.hasObject
+    PostGetAlgae --> AlgaeRest : atSetpoint, safe reef distance
+
+    %% Algae exit
+    AlgaeRest --> AlgaeExit : not Arm.hasObject
+    AlgaeExit --> Rest : atSetpoints
+
+    %% Barge scoring
+    AlgaeRest --> PreBarge : wantExtend
+    PreBarge --> AlgaeRest : not wantExtend
+    PreBarge --> ScoreBarge : wantScore, at scoring distance
+    ScoreBarge --> PreBarge : released or no object, safe barge distance
+
+    %% Algae descore
+    Rest --> AlgaeDescore : wantDescoreAlgae
+    AlgaeDescore --> Rest : not wantDescoreAlgae
+
+    %% Processor scoring
+    AlgaeRest --> PreProcessor : wantScoreProcessor
+    PreProcessor --> ScoreProcessor : wantScore
+    ScoreProcessor --> AlgaeRest : released, no object, safe distance
+    PreProcessor --> AlgaeRest : released, safe distance
+
+    %% Algae ground intake
+    Rest --> PreAlgaeGroundIntake : wantAlgaeGroundIntake, no object
+    PreAlgaeGroundIntake --> AlgaeGroundIntake : wantAlgaeGroundIntake, Intake.atSetpoint
+    AlgaeGroundIntake --> ExitAlgaeGroundIntake : released or Arm.hasObject
+    ExitAlgaeGroundIntake --> AlgaeRest : atSetpoints
+
+    %% Popsicle pickup
+    Rest --> PrePopsiclePickup : wantPopsiclePickup, no object
+    PrePopsiclePickup --> PopsiclePickup : wantPopsiclePickup, Intake.atSetpoint
+    PopsiclePickup --> PrePopsiclePickup : released or auto timeout
+    PrePopsiclePickup --> Rest : not wantPopsiclePickup
+    PopsiclePickup --> PreScore : timeout and Arm.hasObject</div>
+    </div>
+
+    <script>
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: "default",
+        securityLevel: "loose",
+        flowchart: { useMaxWidth: false },
+      });
+
+      let panZoomInstance = null;
+
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          const svg = document.querySelector("#diagram-container svg");
+          if (svg && typeof svgPanZoom !== "undefined") {
+            panZoomInstance = svgPanZoom(svg, {
+              zoomEnabled: true,
+              controlIconsEnabled: true,
+              fit: true,
+              center: true,
+              minZoom: 0.3,
+              maxZoom: 10,
+              zoomScaleSensitivity: 0.3,
+              dblClickZoomEnabled: true,
+              mouseWheelZoomEnabled: true,
+              preventMouseEventsDefault: true,
+              contain: false,
+            });
+          }
+        }, 500);
+      });
+
+      function downloadSVG() {
+        const svg = document.querySelector("#diagram-container svg");
+        if (!svg) return;
+        const blob = new Blob(
+          [new XMLSerializer().serializeToString(svg)],
+          { type: "image/svg+xml" }
+        );
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "Superstructure FSM.svg";
+        a.click();
+        URL.revokeObjectURL(a.href);
+      }
+
+      function downloadPNG() {
+        const svg = document.querySelector("#diagram-container svg");
+        if (!svg) return;
+        const svgData = new XMLSerializer().serializeToString(svg);
+        const img = new Image();
+        img.onload = function () {
+          const canvas = document.createElement("canvas");
+          canvas.width = img.width * 2;
+          canvas.height = img.height * 2;
+          const ctx = canvas.getContext("2d");
+          ctx.fillStyle = "#fff";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob(function (blob) {
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "Superstructure FSM.png";
+            a.click();
+            URL.revokeObjectURL(a.href);
+          });
+        };
+        img.src =
+          "data:image/svg+xml;base64," +
+          btoa(unescape(encodeURIComponent(svgData)));
+      }
+    </script>
+  </body>
+</html>
