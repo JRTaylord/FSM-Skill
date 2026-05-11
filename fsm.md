@@ -1,6 +1,6 @@
 # FSM Extractor Skill
 
-**Project:** https://github.com/JRTaylord/fsm-skill
+**Project:** https://github.com/JRTaylord/FSM-Skill
 
 Analyze source code to extract finite state machine patterns and generate interactive Mermaid diagram viewers. Identifies and isolates multiple independent FSMs in a codebase, producing a separate diagram and viewer for each.
 
@@ -141,7 +141,7 @@ If only one FSM is found, name the file `state-machine.mmd`.
 
 Before generating HTML viewers, verify that each `.mmd` file compiles without errors using the Mermaid CLI.
 
-**Important:** The `@mermaid-js/mermaid-cli` package does **not** use a `mmdc` subcommand — invoke it directly via `npx`. The output flag requires a real file path with a `.svg` extension (not `/dev/null`). Use a temporary file and delete it after validation.
+**Important:** Invoke `@mermaid-js/mermaid-cli` directly via `npx` — do **not** append `mmdc` as a subcommand (i.e. `npx -y @mermaid-js/mermaid-cli ...`, not `npx -y @mermaid-js/mermaid-cli mmdc ...`). The output flag requires a real file path with a `.svg` extension (not `/dev/null`). Use a temporary file and delete it after validation.
 
 Validate all `.mmd` files in a single loop:
 
@@ -264,7 +264,7 @@ Also write **`fsm-output/index.html`** — a landing page that links to all the 
         Made by <a href="https://github.com/JRTaylord">JRTaylord</a>
         &middot; <a href="https://www.frc360.com/">Team 360 Website</a>
         &middot; <a href="https://github.com/FRCTeam360">Team 360 GitHub</a>
-        &middot; <a href="https://github.com/JRTaylord/robot-fsm-skill">FSM Extractor</a>
+        &middot; <a href="https://github.com/JRTaylord/FSM-Skill">FSM Extractor</a>
       </footer>
     </div>
   </body>
@@ -384,7 +384,7 @@ For each individual FSM viewer HTML, use this template, replacing `%%MERMAID_DIA
         Made by <a href="https://github.com/JRTaylord">JRTaylord</a>
         &middot; <a href="https://www.frc360.com/">Team 360 Website</a>
         &middot; <a href="https://github.com/FRCTeam360">Team 360 GitHub</a>
-        &middot; <a href="https://github.com/JRTaylord/robot-fsm-skill">FSM Extractor</a>
+        &middot; <a href="https://github.com/JRTaylord/FSM-Skill">FSM Extractor</a>
       </div>
     </header>
 
@@ -478,6 +478,6 @@ Tell the user:
 
 ## Updating this skill
 
-If the user asks about updates, check the latest version at: https://github.com/JRTaylord/robot-fsm-skill
+If the user asks about updates, check the latest version at: https://github.com/JRTaylord/FSM-Skill
 
 To check for updates, compare the local skill file's content against the latest `fsm.md` on the `master` branch of that repository using `gh api` or `WebFetch`. If there are differences, show the user what changed and offer to update their local copy.

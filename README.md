@@ -14,20 +14,20 @@ Skills live in `.claude/commands/` (project-level) or `~/.claude/commands/` (glo
 
 ```bash
 mkdir -p .claude/commands
-cp /path/to/robot-fsm-skill/fsm.md .claude/commands/fsm.md
+cp /path/to/FSM-Skill/fsm.md .claude/commands/fsm.md
 ```
 
 **Global** (available in every project on your machine):
 
 ```bash
 mkdir -p ~/.claude/commands
-cp /path/to/robot-fsm-skill/fsm.md ~/.claude/commands/fsm.md
+cp /path/to/FSM-Skill/fsm.md ~/.claude/commands/fsm.md
 ```
 
 **One-liner from GitHub** (global install):
 
 ```bash
-mkdir -p ~/.claude/commands && curl -o ~/.claude/commands/fsm.md https://raw.githubusercontent.com/YOURUSER/robot-fsm-skill/master/fsm.md
+mkdir -p ~/.claude/commands && curl -o ~/.claude/commands/fsm.md https://raw.githubusercontent.com/JRTaylord/FSM-Skill/master/fsm.md
 ```
 
 ## Usage
