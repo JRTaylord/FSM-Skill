@@ -1,6 +1,6 @@
 # FSM Extractor Skill
 
-**Project:** https://github.com/JRTaylord/robot-fsm-skill
+**Project:** https://github.com/JRTaylord/fsm-skill
 
 Analyze source code to extract finite state machine patterns and generate interactive Mermaid diagram viewers. Identifies and isolates multiple independent FSMs in a codebase, producing a separate diagram and viewer for each.
 
