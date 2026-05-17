@@ -115,6 +115,12 @@ The skill file (`fsm.md`) contains:
 
 The skill uses Claude Code's built-in tools (Glob, Read, Write) — it does NOT shell out to any external process. Claude reasons over the code directly as the LLM, rather than calling itself via subprocess.
 
+## Contributing
+
+Contributions are welcome! Feel free to open an issue or submit a pull request.
+
+Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before participating.
+
 ## License
 
-MIT
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
